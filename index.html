@@ -2,101 +2,32 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rezept Zufallsgenerator</title>
+
     <link rel="manifest" href="manifest.json">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-        }
-
-        .box {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 8px;
-            margin-top: 8px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        #result {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .recipe-list {
-            margin-top: 10px;
-            padding-left: 20px;
-        }
-
-        .recipe-list li {
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .delete-btn {
-            background-color: #f44336;
-            border: none;
-            color: white;
-            padding: 2px 6px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 5px;
-            height: 22px;
-            line-height: 18px;
-        }
-
-        .delete-btn:hover {
-            background-color: #d32f2f;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>🍽 Rezept Zufallsgenerator</h1>
+<button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
 
 <div class="box">
     <h2>➕ Rezept hinzufügen</h2>
+
     <input type="text" id="recipeInput" placeholder="Rezeptname eingeben">
     <input type="text" id="ingredientsInput" placeholder="Optionale Zutaten (Komma getrennt)">
-    
+
     <select id="category">
         <option value="warm">Warme Gerichte</option>
         <option value="snack">Snacks</option>
         <option value="outdoor">Draußen Gerichte</option>
     </select>
 
-    <button onclick="addRecipe()">Rezept hinzufügen</button>
+    <button id="addRecipeBtn">Rezept hinzufügen</button>
 
-    <h3>📋 Hinzugefügte Rezepte:</h3>
+    <h3>📋 Hinzugefügte Rezepte</h3>
     <ul id="warmList" class="recipe-list"></ul>
     <ul id="snackList" class="recipe-list"></ul>
     <ul id="outdoorList" class="recipe-list"></ul>
@@ -104,104 +35,17 @@
 
 <div class="box">
     <h2>🎲 Zufälliges Rezept auswählen</h2>
-    
+
     <select id="randomCategory">
         <option value="warm">Warme Gerichte</option>
         <option value="snack">Snacks</option>
         <option value="outdoor">Draußen Gerichte</option>
     </select>
 
-    <button onclick="randomRecipe()">Zufälliges Rezept</button>
-
+    <button id="randomBtn">Zufälliges Rezept</button>
     <div id="result"></div>
 </div>
 
-<script>
-    // Standard-Rezepte, die immer angezeigt werden
-    const defaultRecipes = {
-        warm: [
-            { name: "Spaghetti Bolognese", ingredients: ["Tomaten", "Hackfleisch", "Zwiebeln"] },
-            { name: "Kartoffelsuppe", ingredients: ["Kartoffeln", "Karotten", "Lauch"] }
-        ],
-        snack: [
-            { name: "Popcorn", ingredients: ["Mais", "Öl", "Salz"] },
-            { name: "Obstsalat", ingredients: ["Äpfel", "Bananen", "Trauben"] }
-        ],
-        outdoor: [
-            { name: "Grillwürstchen", ingredients: ["Würstchen", "Brötchen", "Senf"] },
-            { name: "Sandwich", ingredients: ["Brot", "Käse", "Salat"] }
-        ]
-    };
-
-    // Rezepte aus LocalStorage oder Standard-Rezepte
-    const recipes = JSON.parse(localStorage.getItem('recipes')) || JSON.parse(JSON.stringify(defaultRecipes));
-
-    function addRecipe() {
-        const recipeName = document.getElementById("recipeInput").value.trim();
-        const ingredients = document.getElementById("ingredientsInput").value.trim();
-        const category = document.getElementById("category").value;
-
-        if (!recipeName) {
-            alert("Bitte einen Rezeptnamen eingeben!");
-            return;
-        }
-
-        const recipe = {
-            name: recipeName,
-            ingredients: ingredients ? ingredients.split(',').map(i => i.trim()) : []
-        };
-
-        recipes[category].push(recipe);
-        saveRecipes();
-        updateRecipeList();
-
-        document.getElementById("recipeInput").value = "";
-        document.getElementById("ingredientsInput").value = "";
-    }
-
-    function randomRecipe() {
-        const category = document.getElementById("randomCategory").value;
-        const list = recipes[category];
-
-        if (list.length === 0) {
-            document.getElementById("result").innerText =
-                "Keine Rezepte in dieser Kategorie!";
-            return;
-        }
-
-        const randomIndex = Math.floor(Math.random() * list.length);
-        const selected = list[randomIndex];
-        const ingredientsText = selected.ingredients.length > 0 ? ` (Zutaten: ${selected.ingredients.join(', ')})` : '';
-        document.getElementById("result").innerText =
-            "🍽 " + selected.name + ingredientsText;
-    }
-
-    function deleteRecipe(category, index) {
-        recipes[category].splice(index, 1);
-        saveRecipes();
-        updateRecipeList();
-    }
-
-    function updateRecipeList() {
-        function renderList(category) {
-            return recipes[category].map((r, i) => {
-                const ingredientsText = r.ingredients.length > 0 ? ` (Zutaten: ${r.ingredients.join(', ')})` : '';
-                return `<li>${r.name}${ingredientsText} <button class="delete-btn" onclick="deleteRecipe('${category}', ${i})">Löschen</button></li>`;
-            }).join('');
-        }
-
-        document.getElementById("warmList").innerHTML = renderList("warm");
-        document.getElementById("snackList").innerHTML = renderList("snack");
-        document.getElementById("outdoorList").innerHTML = renderList("outdoor");
-    }
-
-    function saveRecipes() {
-        localStorage.setItem('recipes', JSON.stringify(recipes));
-    }
-
-    // Initial die Liste anzeigen
-    updateRecipeList();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
