@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+}
+
+.box {
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#result {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.recipe-list {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.recipe-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 400px;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+/* =========================
+   Dark Mode
+========================= */
+body.dark {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark .box {
+    background-color: #1e1e1e;
+}
+
+body.dark input,
+body.dark select {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+body.dark button {
+    background-color: #66bb6a;
+}
+
+body.dark .delete-btn {
+    background-color: #e53935;
+}
+
+/* Toggle Button */
+.theme-toggle {
+    margin: 10px auto 20px;
+    display: block;
+    max-width: 200px;
+}
+
+/* =========================
+   Mobile UI
+========================= */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .box {
+        padding: 12px;
+    }
+
+    input, select, button {
+        font-size: 16px;
+    }
+
+    .recipe-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .delete-btn {
+        width: 100%;
+    }
+}
